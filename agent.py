@@ -4,35 +4,14 @@ import os
 from dotenv import load_dotenv
 from groq import Groq
 
+from tools import calculator, tools
+
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-tools = [
-    {
-        "type": "function",
-        "function": {
-            "name": "calculator",
-            "description": "Evaluates a basic math expression and returns the numeric result.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "expression": {
-                        "type": "string",
-                        "description": "A math expression to evaluate, e.g. '4 + 5 * 2'"
-                    }
-                },
-                "required": ["expression"]
-            }
-        }
-    }
-]
 
 messages=[
     {"role": "user", "content": "what is the capital of france?"}
 ]
-
-def calculator(expression:str)-> float:
-    return eval(expression)
 
 response = client.chat.completions.create(
     model="openai/gpt-oss-120b",
